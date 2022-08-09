@@ -23,9 +23,9 @@ const config: HardhatUserConfig = {
   solidity: "0.8.9",
 };
 
-task("mint", "Mints DoC tokens")
+task("mint-doc", "Mints DoC tokens")
     .addParam("minterAddr", "DocMinter contract address")
-    .addParam("rbtcToMint", "The amount in wei to use for minting DoC token")
+    .addParam("rbtcToMint", "The amount in wei to use for minting DoC tokens")
     .setAction(async (taskArgs, hre) => {
         const docMinterAddr = taskArgs.minterAddr;
         const rbtcToMint = taskArgs.rbtcToMint;
@@ -44,6 +44,30 @@ task("mint", "Mints DoC tokens")
         console.log("refundAddr:", refundAddr);
 
         const resuot = await docMinter.mintDoc(receiverAddr, refundAddr, {value: rbtcToMint, gasLimit: 1_000_000});
+        console.log("Mint result:", resuot);
+    });
+
+task("mint-rdoc", "Mints RDoC tokens")
+    .addParam("minterAddr", "RDocMinter contract address")
+    .addParam("rbtcToMint", "The amount in wei to use for minting RDoC tokens")
+    .setAction(async (taskArgs, hre) => {
+        const rdocMinterAddr = taskArgs.minterAddr;
+        const rbtcToMint = taskArgs.rbtcToMint;
+
+        const accounts = await hre.ethers.getSigners();
+
+        const RDocMinter = await hre.ethers.getContractFactory("RDocMinter");
+
+        const rdocMinter =  await RDocMinter.attach(rdocMinterAddr);
+        console.log("RDocMinter deployed to:", rdocMinter.address);
+
+        const receiverAddr = await accounts[1].getAddress();
+        console.log("receiverAddr:", receiverAddr);
+
+        const refundAddr = await accounts[2].getAddress();
+        console.log("refundAddr:", refundAddr);
+
+        const resuot = await rdocMinter.mintRDoc(receiverAddr, refundAddr, {value: rbtcToMint, gasLimit: 1_000_000});
         console.log("Mint result:", resuot);
     });
 

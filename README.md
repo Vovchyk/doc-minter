@@ -10,7 +10,10 @@ npx hardhat help
 npx hardhat test
 GAS_REPORT=true npx hardhat test
 npx hardhat node
-npx hardhat run scripts/deploy.ts
-npx hardhat run scripts/deploy.ts --network rskTestnet
-npx hardhat mint --minter-addr "<minter addr>" --rbtc-to-mint "<rbtc to mint>" --network rskTestnet
+npx hardhat run scripts/deploy-doc-minter.ts
+npx hardhat run scripts/deploy-doc-minter.ts --network rskTestnet
+npx hardhat run scripts/deploy-rdoc-minter.ts
+npx hardhat run scripts/deploy-rdoc-minter.ts --network rskTestnet
+npx hardhat mint-doc --minter-addr "<minter addr>" --rbtc-to-mint "<rbtc to mint>" --network rskTestnet
+npx hardhat mint-rdoc --minter-addr "<minter addr>" --rbtc-to-mint "<rbtc to mint>" --network rskTestnet
 ```
