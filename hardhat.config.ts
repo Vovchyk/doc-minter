@@ -71,4 +71,25 @@ task("mint-rdoc", "Mints RDoC tokens")
         console.log("Mint result:", resuot);
     });
 
+task("mint-rdoc-tx", "Returns tx data that can be used for minting RDoC tokens")
+    .addParam("minterAddr", "RDocMinter contract address")
+    .addParam("receiverAddr", "Receiver address")
+    .addParam("refundAddr", "Refund address")
+    .setAction(async (taskArgs, hre) => {
+        const rdocMinterAddr = taskArgs.minterAddr;
+        const receiverAddr = taskArgs.receiverAddr;
+        const refundAddr = taskArgs.refundAddr;
+
+        console.log("receiverAddr:", receiverAddr);
+        console.log("refundAddr:", refundAddr);
+
+        const RDocMinter = await hre.ethers.getContractFactory("RDocMinter");
+
+        const rdocMinter =  await RDocMinter.attach(rdocMinterAddr);
+        console.log("RDocMinter deployed to:", rdocMinter.address);
+
+        const tx = await rdocMinter.populateTransaction.mintRDoc(receiverAddr, refundAddr);
+        console.log("Mint tx:", tx);
+    });
+
 export default config;
